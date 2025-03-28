@@ -4,6 +4,6 @@ import WorkflowController from "../controllers";
 const router = Router();
 const workflowController = new WorkflowController()
 
-router.get('/', workflowController.getWorkflowDefinition);
+router.post("/", workflowController.processWorkflow.bind(workflowController));
 
 export default router;

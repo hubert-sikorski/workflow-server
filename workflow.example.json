@@ -1,0 +1,58 @@
+{
+  "definition": [
+    {
+      "description": "Check crypto market",
+      "type": "http request",
+      "value": {
+        "method": "GET",
+        "url": "https://api.coinpaprika.com/v1/global"
+      }
+    },
+    {
+      "description": "Verify BTC dominance",
+      "type": "branch workflow",
+      "value": {
+        "condition": "output[0].bitcoin_dominance_percentage < workflow.inputs.btc_dominance_threshold",
+        "ifTrue": 2,
+        "ifFalse": 5
+      }
+    },
+    {
+      "description": "Check BTC PA today",
+      "type": "http request",
+      "value": {
+        "method": "GET",
+        "url": "https://api.coinpaprika.com/v1/coins/btc-bitcoin/ohlcv/today"
+      }
+    },
+    {
+      "description": "Verify today's open price on BTC",
+      "type": "branch workflow",
+      "value": {
+        "condition": "output[2].open > workflow.inputs.btc_price_threshold",
+        "ifTrue": 4,
+        "ifFalse": 5
+      }
+    },
+    {
+      "description": "Check BTC tweets to check on sentiment",
+      "type": "http request",
+      "value": {
+        "method": "GET",
+        "url": "https://api.coinpaprika.com/v1/coins/btc-bitcoin/twitter"
+      }
+    },
+    {
+      "description": "Check BTC events to check on community engagement",
+      "type": "http request",
+      "value": {
+        "method": "GET",
+        "url": "https://api.coinpaprika.com/v1/coins/btc-bitcoin/events"
+      }
+    }
+  ],
+  "inputs": {
+    "btc_dominance_threshold": 62,
+    "btc_price_threshold": 90000
+  }
+}

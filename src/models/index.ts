@@ -1,6 +1,31 @@
-export type Workflow = Step[];
-export type Step = { type: WorkflowType, value: StepValue };
-type WorkflowType = "http request" | "branch";
-type StepValue = HttpRequestValue | BranchValue;
-export type HttpRequestValue = "GET" | "POST" | "DELETE" | "PUT";
-type BranchValue = "CONDITION_MET" | "CONDITION_NOT_MET";
+export type Workflow = {
+  definition: Step[];
+  inputs: Record<string, any>;
+};
+
+type Step = HttpRequestStep | BranchStep;
+
+type HttpRequestStep = {
+  description: string;
+  type: "http request";
+  value: {
+    method: HttpMethod;
+    url: string;
+    headers?: Record<string, string>;
+    body?: any;
+  }
+};
+
+type BranchStep = {
+  description: string;
+  type: "branch workflow";
+  value: {
+    condition: any;
+    ifTrue: NextStepIndex;
+    ifFalse: NextStepIndex;
+  };
+};
+
+type NextStepIndex = number;
+
+type HttpMethod = "GET" | "POST" | "DELETE" | "PUT" | "PATCH" | "OPTIONS";

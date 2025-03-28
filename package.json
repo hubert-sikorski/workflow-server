@@ -5,6 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "start": "ts-node src/index.ts",
+    "test-workflow": "curl -X POST http://localhost:3000/api/workflow -H 'Content-Type: application/json' -d @workflow.example.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
